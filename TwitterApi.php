@@ -150,7 +150,7 @@ class TwitterApi {
             echo "\n";
             return;
         }
-        echo "\nFollowing tweets are fetched as per the conditions : \n\n";
+        echo PHP_EOL;
         $index = 1;
         if(isset($decode['statuses'])){
             foreach ($decode['statuses'] as $tweet) {
