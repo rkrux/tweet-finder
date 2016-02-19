@@ -24,7 +24,6 @@ while (true) {
 	$query = read_stdin();
 	if (!strcmp($query, "QUIT"))
 		break;
-	$query = '?q=#' . $query;
 	$api_client->makeRequest($url, $request_method, $query);
 	echo '-------------------------------------------------------------------------------------------------' . PHP_EOL . PHP_EOL;
 }

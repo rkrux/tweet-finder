@@ -49,7 +49,10 @@ class TwitterApi {
     private function initializeParameters($base_url, $request_method, $query) {
         $this->base_url = $base_url;
         $this->request_method = $request_method;
-        $this->query = $query;
+        $this->query = array(
+            'q' => $query,
+            'count' => 30
+        );
     }
     
     /**
@@ -83,10 +86,9 @@ class TwitterApi {
             'oauth_timestamp' => time(),
             'oauth_version' => '1.0'
         );
-        $query_trim = str_replace('?', '', $this->query);
-        $query_array = explode('=', $query_trim);
-        $this->oauth[$query_array[0]] = $query_array[1];
-        
+        foreach ($this->query as $key => $value) {
+            $this->oauth[$key] = $value;
+        }
         $this->createBaseString($this->oauth);
         $secret_key = rawurlencode($this->consumer_secret) . '&' . rawurlencode($this->oauth_access_token_secret);
         $oauth_signature = base64_encode(hash_hmac('sha1', $this->base_string, $secret_key, true));
@@ -120,11 +122,16 @@ class TwitterApi {
      */
     private function executeRequest() {
         $this->createAuthHeader();
-        $query_array = explode('=', $this->query);
+        $param = array();
+        foreach ($this->query as $key => $value) {
+            $param[] = rawurlencode($key) . '=' . rawurlencode($value);
+        }
+        $url = $this->base_url . '?' . implode('&', $param);
+        print_r($url);
         $header = array($this->auth_header, 'Expect:');
         $options = array( CURLOPT_HTTPHEADER => $header,
                       CURLOPT_HEADER => false,
-                      CURLOPT_URL => ($this->base_url . $query_array[0] . '=' . urlencode($query_array[1])),
+                      CURLOPT_URL => $url,
                       CURLOPT_RETURNTRANSFER => true,
                       CURLOPT_SSL_VERIFYPEER => false);
         $feed = curl_init();
@@ -155,7 +162,7 @@ class TwitterApi {
             echo PHP_EOL;
             foreach ($decode['statuses'] as $tweet) {
                     echo "TWEET NO. " . $index++ . " => ";
-                    echo $tweet['text'] . "\nBY " . $tweet['user']['name'] . ' ON ' . $tweet['created_at'] . PHP_EOL;
+                    echo $tweet['text'] . "\nBY " . $tweet['user']['name'] . ' ON ' . $tweet['created_at'] . PHP_EOL . PHP_EOL;
             }
         }
     }
