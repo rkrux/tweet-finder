@@ -26,7 +26,7 @@ while (true) {
 		break;
 	$query = '?q=#' . $query;
 	$api_client->makeRequest($url, $request_method, $query);
-	echo PHP_EOL;
+	echo '-------------------------------------------------------------------------------------------------' . PHP_EOL . PHP_EOL;
 }
 
 /*

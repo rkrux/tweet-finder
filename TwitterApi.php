@@ -150,15 +150,12 @@ class TwitterApi {
             echo "\n";
             return;
         }
-        echo PHP_EOL;
         $index = 1;
         if(isset($decode['statuses'])){
+            echo PHP_EOL;
             foreach ($decode['statuses'] as $tweet) {
-                if($tweet['retweet_count'] > 0){
-                    echo "Tweet No. " . $index++ . " => ";
-                    print_r($tweet['text']);
-                    echo "\n\n";
-                }
+                    echo "TWEET NO. " . $index++ . " => ";
+                    echo $tweet['text'] . "\nBY " . $tweet['user']['name'] . ' ON ' . $tweet['created_at'] . PHP_EOL;
             }
         }
     }
