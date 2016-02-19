@@ -127,7 +127,6 @@ class TwitterApi {
             $param[] = rawurlencode($key) . '=' . rawurlencode($value);
         }
         $url = $this->base_url . '?' . implode('&', $param);
-        print_r($url);
         $header = array($this->auth_header, 'Expect:');
         $options = array( CURLOPT_HTTPHEADER => $header,
                       CURLOPT_HEADER => false,
